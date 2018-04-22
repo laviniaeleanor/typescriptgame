@@ -1,43 +1,35 @@
-import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode, BodyParam } from 'routing-controllers'
+import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode, BodyParam, Patch } from 'routing-controllers'
 import Game from './entity';
-
-//   interface HTTPResponse<DataType> {
-//       statusCode: number,
-//       data: DataType
-//   }
 
 const colorBank = ["red", "blue", "green", "yellow", "magenta"]
     
 function getRandomColor(arrayOfColors : string[]) {
   return arrayOfColors[Math.floor(Math.random() * arrayOfColors.length)]
-}
+} 
+
+const moves = (board1, board2) => 
+  board1
+    .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
+    .reduce((a, b) => a.concat(b))
+    .length
 
 @JsonController()
 export default class GameController {
-
-    @Post('/games')
-    @HttpCode(201)
-    createGame(
-        @Body() name : Game["name"]
-    ) { 
-        const game : Partial<Game> = {name: name, color: getRandomColor(colorBank)}
-        return Game.create(game).save()
-    }
-
-//@Post('/users')
-// async createUser(
-//     @Body() user: User
-//     ) {
-//     const {password, ...rest} = user
-//     const entity = User.create(rest)
-//     await entity.setPassword(password)
-//     return entity.save()
 
     @Get('/games')
     async allGames() {
     const games = await Game.find()
     return  {status: HttpCode,
         data: {games}}
+    }
+
+    @Post('/games')
+    @HttpCode(201)
+    createGame(
+        @Body() name : string
+    ) { 
+        const game : Partial<Game> = {name: Object.values(name).toString(), color: getRandomColor(colorBank)}
+        return Game.create(game).save()
     }
 
     @Put('/games/:id')
@@ -48,8 +40,22 @@ export default class GameController {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game')
     
-    console.log(`${game} was replaced with ${update}`)
+    const field = Object.keys(update)
+    console.log(field)
+
+    // if (field[0] === 'id')
+    // return console.error('Id cannot be modified');
+    
+    // if (field[0] === 'name')
     return Game.merge(game, update).save()
+    
+    // if (field[0] === 'color') {
+    // if (colorBank.indexOf) return console.error('Invalid color')
+    // return Game.merge(game, update).save()}
+    
+    // if (field[0] === 'board')
+    // if (moves(game.board, update.board)) 
+    // return Game.merge(game, update).save()
     }
 
     

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, Unique, Generated, Check } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
 import { IsString, IsJSON, Contains, Equals } from 'class-validator';
 
@@ -6,30 +6,26 @@ import { IsString, IsJSON, Contains, Equals } from 'class-validator';
 //   board: string[][]
 // }
 
-// interface Color {
-//   color : "red" | "blue" | "green" | "yellow" | "magenta"
-// }
+// const colorBank = ["red", "blue", "green", "yellow", "magenta"]
 
-const colorBank = ["red", "blue", "green", "yellow", "magenta"]
-    
-function getRandomColor(arrayOfColors : string[]) {
-  return arrayOfColors[Math.floor(Math.random() * arrayOfColors.length)]
-}
+// export interface Color {
+//   color : string | "red" | "blue" | "green" | "yellow" | "magenta"
+// }
 
 @Entity()
 export default class Game extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
-  id?: number
+  @PrimaryGeneratedColumn("increment")
+  readonly id: number
 
   @IsString()
   @Column('text',{ default: "default"})
   name: string
 
   @IsString()
-  @Column('text', { nullable:true,
-  default: getRandomColor(colorBank) })
-  color?: string
+  @Column('text')
+  @Equals('red' || 'blue' || 'green' || 'yellow' || 'magenta')
+  color: string
 
   @IsJSON()
   @Column('json', { nullable:true,
@@ -38,16 +34,6 @@ export default class Game extends BaseEntity {
     ['o', 'o', 'o'],
     ['o', 'o', 'o']
   ]}})
-  board?: {board: string[][]}
+  board: {board: string[][]}
 
 }
-
-// const colorBank = ["red", "blue", "green", "yellow", "magenta"]
-
-// const hash = await bcrypt.hash(rawPassword, 10)
-// this.password = hash
-
- // setBoard() {
-  //   const defaultBoard = 
-  //   return this.board = {board: defaultBoard}
-  // }
