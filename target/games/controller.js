@@ -14,9 +14,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const routing_controllers_1 = require("routing-controllers");
 const entity_1 = require("./entity");
+const colorBank = ["red", "blue", "green", "yellow", "magenta"];
+function getRandomColor(arrayOfColors) {
+    return arrayOfColors[Math.floor(Math.random() * arrayOfColors.length)];
+}
 let GameController = class GameController {
-    createGame(game) {
-        return game.save();
+    createGame(name) {
+        const game = { name: name, color: getRandomColor(colorBank) };
+        return entity_1.default.create(game).save();
     }
     async allGames() {
         const games = await entity_1.default.find();
@@ -36,7 +41,7 @@ __decorate([
     routing_controllers_1.HttpCode(201),
     __param(0, routing_controllers_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [entity_1.default]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], GameController.prototype, "createGame", null);
 __decorate([

@@ -1,12 +1,16 @@
 import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode, BodyParam } from 'routing-controllers'
 import Game from './entity';
-import { STATUS_CODES } from 'http';
 
 //   interface HTTPResponse<DataType> {
 //       statusCode: number,
 //       data: DataType
 //   }
 
+const colorBank = ["red", "blue", "green", "yellow", "magenta"]
+    
+function getRandomColor(arrayOfColors : string[]) {
+  return arrayOfColors[Math.floor(Math.random() * arrayOfColors.length)]
+}
 
 @JsonController()
 export default class GameController {
@@ -14,10 +18,20 @@ export default class GameController {
     @Post('/games')
     @HttpCode(201)
     createGame(
-        @Body() game: Game
-    ) {
-        return game.save()
+        @Body() name : Game["name"]
+    ) { 
+        const game : Partial<Game> = {name: name, color: getRandomColor(colorBank)}
+        return Game.create(game).save()
     }
+
+//@Post('/users')
+// async createUser(
+//     @Body() user: User
+//     ) {
+//     const {password, ...rest} = user
+//     const entity = User.create(rest)
+//     await entity.setPassword(password)
+//     return entity.save()
 
     @Get('/games')
     async allGames() {

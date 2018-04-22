@@ -23,7 +23,7 @@ export default class Game extends BaseEntity {
   id?: number
 
   @IsString()
-  @Column('text')
+  @Column('text',{ default: "default"})
   name: string
 
   @IsString()
