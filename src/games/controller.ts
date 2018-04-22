@@ -1,20 +1,29 @@
-import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode } from 'routing-controllers'
+import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode, BodyParam } from 'routing-controllers'
 import Game from './entity';
+import { STATUS_CODES } from 'http';
+
+//   interface HTTPResponse<DataType> {
+//       statusCode: number,
+//       data: DataType
+//   }
+
 
 @JsonController()
 export default class GameController {
 
-    @Get('/games/:id')
-    getGame(
-      @Param('id') id: number
+    @Post('/games')
+    @HttpCode(201)
+    createGame(
+        @Body() game: Game
     ) {
-      return Game.findOne(id)
+        return game.save()
     }
 
     @Get('/games')
     async allGames() {
     const games = await Game.find()
-    return { games }
+    return  {status: HttpCode,
+        data: {games}}
     }
 
     @Put('/games/:id')
@@ -24,15 +33,18 @@ export default class GameController {
     ) {
     const game = await Game.findOne(id)
     if (!game) throw new NotFoundError('Cannot find game')
-
+    
+    console.log(`${game} was replaced with ${update}`)
     return Game.merge(game, update).save()
     }
 
-    @Post('/games')
-    @HttpCode(201)
-    createGame(
-        @Body() game: Game
-    ) {
-        return game.save()
-    }
+    
 }
+
+
+ // @Get('/games/:id')
+    // getGame(
+    //   @Param('id') id: number
+    // ) {
+    //   return Game.findOne(id)
+    // }

@@ -10,6 +10,6 @@ const app = createKoaServer({
 
 setupDb()
   .then(_ =>
-    app.listen(4000, () => console.log('Listening on port 4000'))
+    app.listen(4000, () => console.log('Port 4000 is open ~ We are ready to receive your commands'))
   )
   .catch(err => console.error(err))

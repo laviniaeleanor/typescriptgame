@@ -8,6 +8,6 @@ const app = routing_controllers_1.createKoaServer({
     controllers: [controller_1.default]
 });
 db_1.default()
-    .then(_ => app.listen(4000, () => console.log('Listening on port 4000')))
+    .then(_ => app.listen(4000, () => console.log('Port 4000 is open ~ We are ready to receive your commands')))
     .catch(err => console.error(err));
 //# sourceMappingURL=index.js.map

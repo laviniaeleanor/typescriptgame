@@ -34,4 +34,4 @@ export default () =>
       logging: true,
       namingStrategy: new CustomNamingStrategy()
   })
-  .then(_ => console.log('Connected to Postgres with TypeORM'))
+  .then(_ => console.log('You are now connected to the killer database'))
