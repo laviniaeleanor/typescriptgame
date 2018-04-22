@@ -1,16 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique, Generated, Check } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
-import { IsString, IsJSON, Contains, Equals } from 'class-validator';
+import { IsString, IsJSON, Equals, IsIn } from 'class-validator';
 
-// interface Board {
-//   board: string[][]
-// }
-
-// const colorBank = ["red", "blue", "green", "yellow", "magenta"]
-
-// export interface Color {
-//   color : string | "red" | "blue" | "green" | "yellow" | "magenta"
-// }
+const validColors =  ["red", "blue", "green", "yellow", "magenta"]
 
 @Entity()
 export default class Game extends BaseEntity {
@@ -24,16 +16,15 @@ export default class Game extends BaseEntity {
 
   @IsString()
   @Column('text')
-  @Equals('red' || 'blue' || 'green' || 'yellow' || 'magenta')
+  @IsIn(validColors)
   color: string
 
-  @IsJSON()
-  @Column('json', { nullable:true,
-  default: {board : [
+  @Column('json', { 
+  default: [
     ['o', 'o', 'o'],
     ['o', 'o', 'o'],
     ['o', 'o', 'o']
-  ]}})
-  board: {board: string[][]}
+  ]})
+  board: string[][]
 
 }
