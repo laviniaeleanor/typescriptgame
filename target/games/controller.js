@@ -44,10 +44,6 @@ let GameController = class GameController {
             if (moves(game.board, update.board) > 1)
                 throw new routing_controllers_1.BadRequestError("Invalid move");
         }
-        console.log(game.board);
-        console.log(update.name);
-        console.log(update.color);
-        console.log(update.board);
         const updatedGame = entity_1.default.merge(game, update);
         const validGame = class_validator_1.validate(updatedGame).then(errors => {
             if (errors.length > 0) {

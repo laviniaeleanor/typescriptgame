@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, Generated, Check } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column} from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
-import { IsString, IsJSON, Equals, IsIn } from 'class-validator';
+import { IsString, IsIn } from 'class-validator';
 
 const validColors =  ["red", "blue", "green", "yellow", "magenta"]
 

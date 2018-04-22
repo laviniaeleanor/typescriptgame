@@ -2,6 +2,7 @@ import { JsonController, Get, Param, Put, Body, NotFoundError, Post, HttpCode, B
 import Game from './entity';
 import { validate } from 'class-validator'
 
+
 const colorBank = ["red", "blue", "green", "yellow", "magenta"]
     
 function getRandomColor(arrayOfColors : string[]) {
@@ -14,6 +15,7 @@ const moves = (board1: string[][], board2: string[][]) =>
     .reduce((a, b) => a.concat(b))
     .length
 
+
 @JsonController()
 export default class GameController {
 
@@ -24,12 +26,14 @@ export default class GameController {
         data: {games}}
     }
 
+
     @Get('/games/:id')
     async getGame(
         @Param('id') id: number
     ) {
       return Game.findOne(id)
     }
+
 
     @Post('/games')
     @HttpCode(201)
@@ -48,14 +52,11 @@ export default class GameController {
         ) {
         const game = await Game.findOne(id)
         if (!game) throw new NotFoundError('Cannot find game')
-
+        
+        //does not work, error: board1.map not a function, to review
         if (update.board) {
             if (moves(game.board, update.board) > 1 ) throw new BadRequestError("Invalid move")
         } 
-        console.log(game.board)
-        console.log(update.name)
-        console.log(update.color)
-        console.log(update.board)
         
         const updatedGame = Game.merge(game, update)
 
@@ -68,8 +69,6 @@ export default class GameController {
             }
         })
         return validGame;
-        
-        
         
         }
     
